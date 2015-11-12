@@ -1,5 +1,5 @@
 <?
-function Connected_Components(array $t_args, array $inputs, array $outputs)
+function ConnectedComponents(array $t_args, array $inputs, array $outputs)
 {
     // Class name is randomly generated
     $className = generate_name("CCompGLA");

@@ -1,4 +1,4 @@
-Package: gtBase
+Package: gtGraph
 Type: Package
 Title: R Interface for the Grokit System
 Version: 1.0
