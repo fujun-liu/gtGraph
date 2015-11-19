@@ -64,6 +64,13 @@ class <?=$className?> {
       globalUF.Clear();
   }
 
+  void FinalizeLocalState(){
+	if (!localFinalized){
+		localUF.FinalizeRoot();
+		localFinalized = true;
+	}
+  }
+
   void Finalize(){
       OutputIterator = localUF.GetUF().begin();
       EndOfOutput = localUF.GetUF().end();
@@ -78,6 +85,7 @@ class <?=$className?> {
       }else{
         return false;
       }
+ }
 };
 
 <?

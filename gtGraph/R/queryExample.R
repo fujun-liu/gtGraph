@@ -1,1 +1,0 @@
-CComp(data, c(S, T), c(VertexID, CompID))
