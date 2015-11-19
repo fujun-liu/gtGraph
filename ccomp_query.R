@@ -1,5 +1,3 @@
-library(gtBase);
-grokit.library("graph");
 library(gtGraph)
 
 data <- Load(Graph)
