@@ -13,7 +13,7 @@ function ConnectedComponents(array $t_args, array $inputs, array $outputs)
     $outputs_ = ['node' => $outType, 'component' => $outType];
     $outputs = array_combine(array_keys($outputs), $outputs_);
 
-    $sys_headers = ['unordered_map', 'set', 'vector'];
+    $sys_headers = ["vector", "mct/hash-map.hpp"];
     $user_headers = [];
     $lib_headers = [];
 ?>
@@ -26,14 +26,15 @@ class <?=$className?> {
  
  class UnionFindMap{
   private:
-    std::unordered_map<uint64_t, uint64_t> parent; 
-    std::unordered_map<uint64_t, uint64_t> sz;
+    mct::closed_hash_map<uint64_t, uint64_t> parent; 
+    mct::closed_hash_map<uint64_t, uint64_t> sz;
+
     const uint64_t NON_EXISTING_ID = -1;
   public:
     // constructor did nothing
     UnionFindMap(){}
 
-    /*void Init(std::unordered_map<uint64_t, uint64_t>& parent){
+    /*void Init(mct::closed_hash_map<uint64_t, uint64_t>& parent){
       this->parent = parent;
     }*/
 
@@ -73,13 +74,13 @@ class <?=$className?> {
       }
     }
 
-    std::unordered_map<uint64_t, uint64_t>& GetUF(){
+    mct::closed_hash_map<uint64_t, uint64_t>& GetUF(){
       return parent;
     }
 
     // 
     void FinalizeRoot(){
-      for(std::unordered_map<uint64_t, uint64_t>::iterator it = parent.begin(); it != parent.end(); ++ it){
+      for(mct::closed_hash_map<uint64_t, uint64_t>::iterator it = parent.begin(); it != parent.end(); ++ it){
         it->second = Find(it->first);
       }
     }
@@ -94,7 +95,8 @@ class <?=$className?> {
  private:
   // union-find map data structure, which contains nodeID->compID information
   UnionFindMap localUF, globalUF;
-  std::unordered_map<uint64_t, uint64_t>::iterator OutputIterator, EndOfOutput;
+  mct::closed_hash_map<uint64_t, uint64_t>::iterator OutputIterator, EndOfOutput;
+  //mct::closed_hash_map<uint64_t, uint64_t>::iterator OutputIterator, EndOfOutput;
   bool localFinalized = false;
  public:
   <?=$className?>() {}
@@ -109,8 +111,8 @@ class <?=$className?> {
   void AddState(<?=$className?> &other) {
       FinalizeLocalState();
       other.FinalizeLocalState();
-      std::unordered_map<uint64_t, uint64_t>& compIDLocal = localUF.GetUF();
-      std::unordered_map<uint64_t, uint64_t>& otherState = other.localUF.GetUF();
+      mct::closed_hash_map<uint64_t, uint64_t>& compIDLocal = localUF.GetUF();
+      mct::closed_hash_map<uint64_t, uint64_t>& otherState = other.localUF.GetUF();
 
       for(auto const& entry:otherState){
         if (compIDLocal.find(entry.first) != compIDLocal.end()
@@ -123,7 +125,7 @@ class <?=$className?> {
 
       // merge local and global
       globalUF.FinalizeRoot();
-      std::unordered_map<uint64_t, uint64_t>& compIDGlobal = globalUF.GetUF();
+      mct::closed_hash_map<uint64_t, uint64_t>& compIDGlobal = globalUF.GetUF();
       for (auto& p:compIDLocal){
         if (compIDGlobal.find(p.second) != compIDGlobal.end()){
           p.second = compIDGlobal[p.second];
