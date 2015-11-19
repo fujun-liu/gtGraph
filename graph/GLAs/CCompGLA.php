@@ -126,6 +126,10 @@ class <?=$className?> {
       // merge local and global
       globalUF.FinalizeRoot();
       mct::closed_hash_map<uint64_t, uint64_t>& compIDGlobal = globalUF.GetUF();
+      if (compIDGlobal.empty()){
+        return;
+      }
+      
       for (auto& p:compIDLocal){
         if (compIDGlobal.find(p.second) != compIDGlobal.end()){
           p.second = compIDGlobal[p.second];
