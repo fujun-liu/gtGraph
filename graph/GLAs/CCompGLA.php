@@ -142,9 +142,9 @@ class <?=$className?> {
         }
       }
 
-      if (globalUF.IsEmpty()){
+      /*if (globalUF.IsEmpty()){
         return;
-      }
+      }*/
 
       // merge local and global
       globalUF.FinalizeRoot();
