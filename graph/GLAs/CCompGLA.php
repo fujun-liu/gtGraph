@@ -106,7 +106,6 @@ class <?=$className?> {
   // union-find map data structure, which contains nodeID->compID information
   UnionFindMap localUF, globalUF;
   mct::closed_hash_map<uint64_t, uint64_t>::iterator OutputIterator, EndOfOutput;
-  //mct::closed_hash_map<uint64_t, uint64_t>::iterator OutputIterator, EndOfOutput;
   bool localFinalized = false;
  public:
   <?=$className?>() {}
