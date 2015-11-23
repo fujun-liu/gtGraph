@@ -172,7 +172,9 @@ class <?=$className?> {
   }
 
   bool GetNextResult(<?=typed_ref_args($outputs_)?>) {
-      if (OutputIterator != EndOfOutput){
+      long count = 0;
+      if (count < 10000 && OutputIterator != EndOfOutput){
+        ++ count;
         node = OutputIterator->first;
         component = OutputIterator->second;
         ++ OutputIterator;
