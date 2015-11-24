@@ -108,8 +108,8 @@ class <?=$className?> {
 
  private:
   // union-find map data structure, which contains nodeID->compID information
-  UnionFindMap localUF, globalUF;
-  mct::closed_hash_map<uint64_t, uint64_t>::iterator OutputIterator, EndOfOutput;
+  UnionFindMap primary_uf, secondary_uf;
+  mct::closed_hash_map<uint64_t, uint64_t>::iterator output_iterator, output_iterator_end;
   bool localFinalized = false;
  public:
   <?=$className?>() {}
@@ -118,45 +118,45 @@ class <?=$className?> {
     uint64_t src_ = Hash(src);
     uint64_t dst_ = Hash(dst);
   
-    localUF.Union(src_, dst_);
+    primary_uf.Union(src_, dst_);
   }
 
   void AddState(<?=$className?> &other) {
       FinalizeLocalState();
       other.FinalizeLocalState();
-      mct::closed_hash_map<uint64_t, uint64_t>* compIDLocal = localUF.GetUF();
-      mct::closed_hash_map<uint64_t, uint64_t>* otherState = other.localUF.GetUF();
+      mct::closed_hash_map<uint64_t, uint64_t>* this_state_data = primary_uf.GetUF();
+      mct::closed_hash_map<uint64_t, uint64_t>* other_state_data = other.primary_uf.GetUF();
 
-      if (localUF.GetSize() < other.localUF.GetSize()){
-        mct::closed_hash_map<uint64_t, uint64_t>* tmp = compIDLocal;
-        compIDLocal = otherState;
-        otherState = tmp;
+      if (primary_uf.GetSize() < other.primary_uf.GetSize()){
+        mct::closed_hash_map<uint64_t, uint64_t>* tmp = this_state_data;
+        this_state_data = other_state_data;
+        other_state_data = tmp;
 
-        localUF.SetData(compIDLocal);
-        other.localUF.SetData(otherState);
+        primary_uf.SetData(this_state_data);
+        other.primary_uf.SetData(other_state_data);
       }
       
-      globalUF.Clear();
-      for(auto const& entry:(*otherState)){
-        if ((*compIDLocal).find(entry.first) != (*compIDLocal).end()
-            && (*compIDLocal)[entry.first] != entry.second){ // merge needed
-          globalUF.Union((*compIDLocal)[entry.first], entry.second);
+      secondary_uf.Clear();
+      for(auto const& entry:(*other_state_data)){
+        if ((*this_state_data).find(entry.first) != (*this_state_data).end()
+            && (*this_state_data)[entry.first] != entry.second){ // merge needed
+          secondary_uf.Union((*this_state_data)[entry.first], entry.second);
         }else{
-          (*compIDLocal)[entry.first] = entry.second;
+          (*this_state_data)[entry.first] = entry.second;
         }
       }
 
-      /*if (globalUF.IsEmpty()){
+      /*if (secondary_uf.IsEmpty()){
         return;
       }*/
 
-      // merge local and global
-      globalUF.FinalizeRoot();
-      mct::closed_hash_map<uint64_t, uint64_t>* compIDGlobal = globalUF.GetUF();
+      // merge primary and secondary
 
-      for (auto& p:(*compIDLocal)){
-        if ((*compIDGlobal).find(p.second) != (*compIDGlobal).end()){
-          p.second = (*compIDGlobal)[p.second];
+      secondary_uf.FinalizeRoot();
+      mct::closed_hash_map<uint64_t, uint64_t>* secondary_state_data = secondary_uf.GetUF();
+      for (auto& p:(*this_state_data)){
+        if ((*secondary_state_data).find(p.second) != (*secondary_state_data).end()){
+          p.second = (*secondary_state_data)[p.second];
         }
       }
       
@@ -164,23 +164,22 @@ class <?=$className?> {
 
   void FinalizeLocalState(){
   	if (!localFinalized){
-  		localUF.FinalizeRoot();
+  		primary_uf.FinalizeRoot();
   		localFinalized = true;
   	}
   }
 
   void Finalize(){
-      OutputIterator = localUF.GetUF()->begin();
-      EndOfOutput = localUF.GetUF()->end();
+      output_iterator = (*primary_uf.GetUF()).begin();
+      output_iterator_end = (*primary_uf.GetUF()).end();
   }
 
   bool GetNextResult(<?=typed_ref_args($outputs_)?>) {
-      long count = 0;
-      if (count < 10000 && OutputIterator != EndOfOutput){
-        ++ count;
-        node = OutputIterator->first;
-        component = OutputIterator->second;
-        ++ OutputIterator;
+
+      if (output_iterator != output_iterator_end){
+        node = output_iterator->first;
+        component = output_iterator->second;
+        ++ output_iterator;
         return true;
       }else{
         return false;
