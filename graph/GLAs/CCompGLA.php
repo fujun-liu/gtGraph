@@ -109,7 +109,7 @@ class <?=$className?> {
 
  private:
   // union-find map data structure, which contains nodeID->compID information
-  UnionFindMap primary_uf, secondary_uf;
+  UnionFindMap primary_uf;
   mct::closed_hash_map<uint64_t, uint64_t>::iterator output_iterator, output_iterator_end;
   bool localFinalized = false;
  public:
@@ -137,7 +137,7 @@ class <?=$className?> {
         other.primary_uf.SetData(other_state_data);
       }
       
-      secondary_uf.Clear();
+      UnionFindMap secondary_uf;
       //go over the other state, and maintain a secondary table
       for(auto const& entry:(*other_state_data)){
         if ((*this_state_data).find(entry.first) != (*this_state_data).end()
