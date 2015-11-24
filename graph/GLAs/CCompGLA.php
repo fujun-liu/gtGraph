@@ -99,6 +99,10 @@ class <?=$className?> {
       (*parent).clear();
       sz.clear();
     }
+    
+    ~UnionFindMap(){
+        delete parent;
+    }
 
  };
 
