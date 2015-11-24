@@ -136,7 +136,7 @@ class <?=$className?> {
         other.localUF.SetData(otherState);
       }
       
-      
+      globalUF.Clear();
       for(auto const& entry:(*otherState)){
         if ((*compIDLocal).find(entry.first) != (*compIDLocal).end()
             && (*compIDLocal)[entry.first] != entry.second){ // merge needed
@@ -159,7 +159,7 @@ class <?=$className?> {
           p.second = (*compIDGlobal)[p.second];
         }
       }
-      globalUF.Clear();
+      
   }
 
   void FinalizeLocalState(){
