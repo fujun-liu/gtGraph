@@ -36,6 +36,7 @@ class <?=$className?> {
       parent = new mct::closed_hash_map<uint64_t, uint64_t>();
     }
 
+
     uint64_t Find(uint64_t i){
       if ((*parent).find(i) == (*parent).end()){
         return NON_EXISTING_ID;
@@ -137,6 +138,7 @@ class <?=$className?> {
       }
       
       secondary_uf.Clear();
+      //go over the other state, and maintain a secondary table
       for(auto const& entry:(*other_state_data)){
         if ((*this_state_data).find(entry.first) != (*this_state_data).end()
             && (*this_state_data)[entry.first] != entry.second){ // merge needed
@@ -146,12 +148,12 @@ class <?=$className?> {
         }
       }
 
-      /*if (secondary_uf.IsEmpty()){
+      // check if side table empty
+      if (secondary_uf.IsEmpty()){
         return;
-      }*/
+      }
 
-      // merge primary and secondary
-
+      // apply the side table
       secondary_uf.FinalizeRoot();
       mct::closed_hash_map<uint64_t, uint64_t>* secondary_state_data = secondary_uf.GetUF();
       for (auto& p:(*this_state_data)){
@@ -175,7 +177,6 @@ class <?=$className?> {
   }
 
   bool GetNextResult(<?=typed_ref_args($outputs_)?>) {
-
       if (output_iterator != output_iterator_end){
         node = output_iterator->first;
         component = output_iterator->second;
