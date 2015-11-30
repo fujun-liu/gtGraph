@@ -179,7 +179,7 @@ class <?=$className?> {
   }
 
   bool GetNextResult(<?=typed_ref_args($outputs_)?>) {
-      
+      return false;
       if (output_iterator != output_iterator_end){
         node = output_iterator->first;
         component = output_iterator->second;
