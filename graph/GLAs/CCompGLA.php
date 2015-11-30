@@ -146,23 +146,23 @@ class <?=$className?> {
           if (this_comp_id != entry.second) // merge needed
             secondary_uf.Union(this_comp_id, entry.second);
         }else{
-          ;//(*this_state_data)[entry.first] = entry.second;
+          (*this_state_data)[entry.first] = entry.second;
         }
       }
 
       // check if side table empty
-      /*if (secondary_uf.IsEmpty()){
+      if (secondary_uf.IsEmpty()){
         return;
-      }*/
+      }
 
       // apply the side table
-      /*secondary_uf.FinalizeRoot();
+      secondary_uf.FinalizeRoot();
       mct::closed_hash_map<uint64_t, uint64_t>* secondary_state_data = secondary_uf.GetUF();
       for (auto& p:(*this_state_data)){
         if ((*secondary_state_data).find(p.second) != (*secondary_state_data).end()){
           p.second = (*secondary_state_data)[p.second];
         }
-      }*/
+      }
       
   }
 
@@ -179,7 +179,7 @@ class <?=$className?> {
   }
 
   bool GetNextResult(<?=typed_ref_args($outputs_)?>) {
-      return false;
+      
       if (output_iterator != output_iterator_end){
         node = output_iterator->first;
         component = output_iterator->second;
