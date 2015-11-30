@@ -172,14 +172,16 @@ class <?=$className?> {
   }
 
   void Finalize(){
-      output_iterator = (*primary_uf).GetUF().begin();
-      output_iterator_end = (*primary_uf).GetUF().end();
+      output_iterator = primary_uf.GetUF()->begin();
+      output_iterator_end = primary_uf.GetUF()->end();
   }
 
   bool GetNextResult(<?=typed_ref_args($outputs_)?>) {
-      if (output_iterator != output_iterator_end){
+      int count = 0;
+      if (count < 10000 && output_iterator != output_iterator_end){
         node = output_iterator->first;
         component = output_iterator->second;
+        ++ count;
         ++ output_iterator;
         return true;
       }else{
