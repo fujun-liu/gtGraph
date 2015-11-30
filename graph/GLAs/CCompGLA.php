@@ -149,9 +149,9 @@ class <?=$className?> {
       }
 
       // check if side table empty
-      if (secondary_uf.IsEmpty()){
+      /*if (secondary_uf.IsEmpty()){
         return;
-      }
+      }*/
 
       // apply the side table
       secondary_uf.FinalizeRoot();
