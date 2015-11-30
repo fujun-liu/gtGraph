@@ -172,8 +172,8 @@ class <?=$className?> {
   }
 
   void Finalize(){
-      output_iterator = (*primary_uf.GetUF()).begin();
-      output_iterator_end = (*primary_uf.GetUF()).end();
+      output_iterator = (*primary_uf).GetUF().begin();
+      output_iterator_end = (*primary_uf).GetUF().end();
   }
 
   bool GetNextResult(<?=typed_ref_args($outputs_)?>) {
