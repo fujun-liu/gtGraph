@@ -136,17 +136,18 @@ class <?=$className?> {
         primary_uf.SetData(this_state_data);
         other.primary_uf.SetData(other_state_data);
       }
+      assert(primary_uf.GetSize() >= other.primary_uf.GetSize());
       
       UnionFindMap secondary_uf;
       //go over the other state, and maintain a secondary table
-      /*for(auto const& entry:(*other_state_data)){
+      for(auto const& entry:(*other_state_data)){
         if ((*this_state_data).find(entry.first) != (*this_state_data).end()
             && (*this_state_data)[entry.first] != entry.second){ // merge needed
-          secondary_uf.Union((*this_state_data)[entry.first], entry.second);
+          ;//secondary_uf.Union((*this_state_data)[entry.first], entry.second);
         }else{
           (*this_state_data)[entry.first] = entry.second;
         }
-      }*/
+      }
 
       // check if side table empty
       /*if (secondary_uf.IsEmpty()){
