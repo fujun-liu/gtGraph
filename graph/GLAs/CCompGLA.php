@@ -125,7 +125,7 @@ class <?=$className?> {
   void AddState(<?=$className?> &other) {
       FinalizeLocalState();
       other.FinalizeLocalState();
-      /*mct::closed_hash_map<uint64_t, uint64_t>* this_state_data = primary_uf.GetUF();
+      mct::closed_hash_map<uint64_t, uint64_t>* this_state_data = primary_uf.GetUF();
       mct::closed_hash_map<uint64_t, uint64_t>* other_state_data = other.primary_uf.GetUF();
 
       if (primary_uf.GetSize() < other.primary_uf.GetSize()){
@@ -135,7 +135,7 @@ class <?=$className?> {
 
         primary_uf.SetData(this_state_data);
         other.primary_uf.SetData(other_state_data);
-      }*/
+      }
       
       UnionFindMap secondary_uf;
       //go over the other state, and maintain a secondary table
