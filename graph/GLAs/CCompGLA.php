@@ -154,13 +154,13 @@ class <?=$className?> {
       }*/
 
       // apply the side table
-      secondary_uf.FinalizeRoot();
+      /*secondary_uf.FinalizeRoot();
       mct::closed_hash_map<uint64_t, uint64_t>* secondary_state_data = secondary_uf.GetUF();
       for (auto& p:(*this_state_data)){
         if ((*secondary_state_data).find(p.second) != (*secondary_state_data).end()){
           p.second = (*secondary_state_data)[p.second];
         }
-      }
+      }*/
       
   }
 
@@ -177,11 +177,11 @@ class <?=$className?> {
   }
 
   bool GetNextResult(<?=typed_ref_args($outputs_)?>) {
-      int count = 0;
-      if (count < 10000 && output_iterator != output_iterator_end){
+      
+      if (output_iterator != output_iterator_end){
         node = output_iterator->first;
         component = output_iterator->second;
-        ++ count;
+        
         ++ output_iterator;
         return true;
       }else{
