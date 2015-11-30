@@ -144,9 +144,9 @@ class <?=$className?> {
         if ((*this_state_data).count(entry.first) == 1){// key exists in this state
           uint64_t this_comp_id = (*this_state_data)[entry.first];
           if (this_comp_id != entry.second) // merge needed
-            ;//secondary_uf.Union(this_comp_id, entry.second);
+            secondary_uf.Union(this_comp_id, entry.second);
         }else{
-          (*this_state_data)[entry.first] = entry.second;
+          ;//(*this_state_data)[entry.first] = entry.second;
         }
       }
 
