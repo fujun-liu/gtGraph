@@ -141,9 +141,10 @@ class <?=$className?> {
       UnionFindMap secondary_uf;
       //go over the other state, and maintain a secondary table
       for(auto const& entry:(*other_state_data)){
-        if ((*this_state_data).find(entry.first) != (*this_state_data).end()
-            && (*this_state_data)[entry.first] != entry.second){ // merge needed
-          ;//secondary_uf.Union((*this_state_data)[entry.first], entry.second);
+        if ((*this_state_data).count(entry.first) == 1){// key exists in this state
+          uint64_t this_comp_id = (*this_state_data)[entry.first];
+          if (this_comp_id != entry.second) // merge needed
+            ;//secondary_uf.Union(this_comp_id, entry.second);
         }else{
           (*this_state_data)[entry.first] = entry.second;
         }
