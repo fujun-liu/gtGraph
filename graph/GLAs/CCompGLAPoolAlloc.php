@@ -13,7 +13,7 @@ function ConnectedComponentsPoolAlloc(array $t_args, array $inputs, array $outpu
     $outputs_ = ['node' => $outType, 'component' => $outType];
     $outputs = array_combine(array_keys($outputs), $outputs_);
 
-    $sys_headers = ["vector", "functional", "boost/functional/hash.hpp", "unordered_map", "boost/pool/pool_alloc.hpp"];
+    $sys_headers = ["vector", "utility", "functional", "boost/functional/hash.hpp", "unordered_map", "boost/pool/pool_alloc.hpp"];
     $user_headers = [];
     $lib_headers = [];
 ?>
@@ -24,7 +24,7 @@ class <?=$className?>;
 
 class <?=$className?> {
  typedef std::unordered_map<uint64_t, uint64_t, boost::hash<uint64_t>, 
-        std::equal_to<uint64_t>, boost::pool_allocator<uint64_t, uint64_t>> UFData;
+        std::equal_to<uint64_t>, boost::pool_allocator<std::pair<uint64_t const, uint64_t>>> UFData;
 
  class UnionFindMap{
   private:
