@@ -13,7 +13,7 @@ function ConnectedComponentsPoolAlloc(array $t_args, array $inputs, array $outpu
     $outputs_ = ['node' => $outType, 'component' => $outType];
     $outputs = array_combine(array_keys($outputs), $outputs_);
 
-    $sys_headers = ["vector", "unordered_map", "boost/pool/pool_alloc.hpp"];
+    $sys_headers = ["vector", "functional", "unordered_map", "boost/pool/pool_alloc.hpp"];
     $user_headers = [];
     $lib_headers = [];
 ?>
