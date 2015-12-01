@@ -23,8 +23,10 @@ using namespace std;
 class <?=$className?>;
 
 class <?=$className?> {
- typedef std::unordered_map<uint64_t, uint64_t, boost::hash<uint64_t>, 
-        std::equal_to<uint64_t>, boost::pool_allocator<std::pair<uint64_t const, uint64_t>>> UFData;
+ //typedef std::unordered_map<uint64_t, uint64_t, boost::hash<uint64_t>, 
+        //std::equal_to<uint64_t>, boost::pool_allocator<std::pair<uint64_t const, uint64_t>>> UFData;
+ typedef std::unordered_map<uint64_t, uint64_t, std::less<uint64_t>, 
+        boost::pool_allocator<std::pair<uint64_t, uint64_t>>> UFData;
  //typedef std::unordered_map<uint64_t, uint64_t> UFData;
  class UnionFindMap{
   private:
