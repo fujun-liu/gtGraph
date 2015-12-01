@@ -74,7 +74,7 @@ class <?=$className?> {
       }
     }
 
-    std::unordered_map<uint64_t, uint64_t>* GetUF(){
+    UFData* GetUF(){
       return parent;
     }
 
@@ -86,7 +86,7 @@ class <?=$className?> {
       return (uint64_t) (*parent).size(); 
     }
 
-    void SetData(std::unordered_map<uint64_t, uint64_t>* other_data){
+    void SetData(UFData* other_data){
       parent = other_data;
     }
 
