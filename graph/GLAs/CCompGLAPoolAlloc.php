@@ -130,7 +130,7 @@ class <?=$className?> {
       UFData* other_state_data = other.primary_uf.GetUF();
 
       if (primary_uf.GetSize() < other.primary_uf.GetSize()){
-        std::unordered_map<uint64_t, uint64_t>* tmp = this_state_data;
+        UFData* tmp = this_state_data;
         this_state_data = other_state_data;
         other_state_data = tmp;
 
