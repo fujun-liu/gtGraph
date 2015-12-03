@@ -109,8 +109,8 @@ class <?=$className?> {
       return;
     } else {
       long tmp_comp_id = (long) max(s, t);
-      node_component(s) = max(tmp_comp_id, node_component(s));
-      node_component(t) = max(tmp_comp_id, node_component(t));
+      node_component(s) = max(tmp_comp_id, (long) node_component(s));
+      node_component(t) = max(tmp_comp_id, (long) node_component(t));
     }
   }
 
