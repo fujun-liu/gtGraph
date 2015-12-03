@@ -93,7 +93,7 @@ class <?=$className?> {
   int iteration;
   
   // check if need more iterations
-  static bool need_more_iterations;
+  //static bool need_more_iterations;
 
  public:
   <?=$className?>(const <?=$constantState?>& state)
@@ -109,17 +109,8 @@ class <?=$className?> {
       return;
     } else {
       long tmp_comp_id = (long) max(s, t);
-      long s_id = node_component(s), t_id = node_component(t);
-
-      if (tmp_comp_id > s_id){
-        node_component(s) = tmp_comp_id;
-        need_more_iterations = true;
-      }
-      
-      if (tmp_comp_id > t_id){
-        node_component(t) = tmp_comp_id;
-        need_more_iterations = true;
-      }
+      node_component(s) = max(tmp_comp_id, node_component(s));
+      node_component(t) = max(tmp_comp_id, node_component(t));
     }
   }
 
@@ -143,11 +134,6 @@ class <?=$className?> {
       node_component.fill(0);
       return true;
     } else {
-      if (need_more_iterations){
-        need_more_iterations = false;
-      }else{
-        return false;
-      }
       return iteration < kIterations + 1;
     }
   }
@@ -156,7 +142,7 @@ class <?=$className?> {
 
   bool GetNextResult(<?=typed_ref_args($outputs_)?>) {
 
-    if (need_more_iterations && iteration < kIterations + 1)
+    if (iteration < kIterations + 1)
       return false;
     
     if(output_iterator < num_nodes){
@@ -172,7 +158,6 @@ class <?=$className?> {
 
 // Initialize the static member types.
 arma::rowvec <?=$className?>::node_component;
-bool <?=$className?>::need_more_iterations = true;
 
 <?
     return [
