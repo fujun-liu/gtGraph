@@ -166,6 +166,7 @@ class <?=$className?> {
     }else{
       return false;
     }
+  }
     
 };
 
