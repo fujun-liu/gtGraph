@@ -34,7 +34,7 @@ class <?=$className?>ConstantState {
 function CCompLP($t_args, $inputs, $outputs)
 {
     // Class name is randomly generated.
-    $className = generate_name('PageRank');
+    $className = generate_name('CComp');
     // Initializiation of argument names.
     $inputs_ = array_combine(['s', 't'], $inputs);
     $vertex = $inputs_['s'];
@@ -57,7 +57,7 @@ using namespace std;
 class <?=$className?>;
 
 <?  $constantState = lookupResource(
-        'statistics::CCompLP_Constant_State',
+        'graph::CCompLP_Constant_State',
         ['className' => $className]
     ); ?>
 
