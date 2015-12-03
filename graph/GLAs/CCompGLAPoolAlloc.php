@@ -13,7 +13,7 @@ function ConnectedComponentsPoolAlloc(array $t_args, array $inputs, array $outpu
     $outputs_ = ['node' => $outType, 'component' => $outType];
     $outputs = array_combine(array_keys($outputs), $outputs_);
 
-    $sys_headers = ["vector", "unordered_map", "boost/pool/pool_alloc.hpp"];
+    $sys_headers = ["vector", "map", "utility", "functional", "boost/functional/hash.hpp", "unordered_map", "boost/pool/pool_alloc.hpp"];
     $user_headers = [];
     $lib_headers = [];
 ?>
@@ -23,8 +23,11 @@ using namespace std;
 class <?=$className?>;
 
 class <?=$className?> {
- typedef std::unordered_map<uint64_t, uint64_t, less<uint64_t>, boost::pool_allocator<uint64_t, uint64_t>> UFData;
-
+ //typedef std::unordered_map<uint64_t, uint64_t, boost::hash<uint64_t>, 
+        //std::equal_to<uint64_t>, boost::pool_allocator<std::pair<uint64_t const, uint64_t>>> UFData;
+ typedef std::map<uint64_t, uint64_t, std::less<uint64_t>, 
+        boost::pool_allocator<std::pair<uint64_t, uint64_t>>> UFData;
+ //typedef std::unordered_map<uint64_t, uint64_t> UFData;
  class UnionFindMap{
   private:
     UFData* parent; 
@@ -73,7 +76,7 @@ class <?=$className?> {
       }
     }
 
-    std::unordered_map<uint64_t, uint64_t>* GetUF(){
+    UFData* GetUF(){
       return parent;
     }
 
@@ -85,7 +88,7 @@ class <?=$className?> {
       return (uint64_t) (*parent).size(); 
     }
 
-    void SetData(std::unordered_map<uint64_t, uint64_t>* other_data){
+    void SetData(UFData* other_data){
       parent = other_data;
     }
 
@@ -129,7 +132,7 @@ class <?=$className?> {
       UFData* other_state_data = other.primary_uf.GetUF();
 
       if (primary_uf.GetSize() < other.primary_uf.GetSize()){
-        std::unordered_map<uint64_t, uint64_t>* tmp = this_state_data;
+        UFData* tmp = this_state_data;
         this_state_data = other_state_data;
         other_state_data = tmp;
 
