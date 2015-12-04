@@ -67,7 +67,7 @@ class <?=$className?> {
   using ConstantState = <?=$constantState?>;
 
   // The number of iterations to perform, not counting the initial set-up.
-  static const constexpr int kIterations = 5;
+  static const constexpr int kIterations = 10;
 
   // The work is split into chunks of this size before being partitioned.
   static const constexpr int kBlock = 32;
@@ -93,13 +93,13 @@ class <?=$className?> {
   int iteration;
   
   // check if need more iterations
-  //static bool need_more_iterations;
+  long connections;
 
  public:
   <?=$className?>(const <?=$constantState?>& state)
       : constant_state(state),
         num_nodes(state.num_nodes),
-        iteration(state.iteration),output_iterator(0) {
+        iteration(state.iteration),output_iterator(0),connections(0) {
   }
 
   // Basic dynamic array allocation.
@@ -107,10 +107,20 @@ class <?=$className?> {
     if (iteration == 0) {
       num_nodes = max((long) max(s, t), num_nodes);
       return;
-    } else {
-      long tmp_comp_id = (long) max(s, t);
-      node_component(s) = max(tmp_comp_id, (long) node_component(s));
-      node_component(t) = max(tmp_comp_id, (long) node_component(t));
+    } else if (iteration == 1){
+      long max_known = (long) max(s, t);
+      node_component(s) = max_known;
+      node_component(t) = max_known;
+      ++ connections;
+    }else{
+      long s_id = node_component(s), t_id = node_component(t);
+      if (s_id != t_id){
+        ++ connections;
+        if (s_id > t_id)
+          node_component(t) = s_id;
+        else
+          node_component(s) = t_id;
+      }
     }
   }
 
@@ -118,6 +128,8 @@ class <?=$className?> {
   void AddState(<?=$className?> &other) {
     if (iteration == 0)
       num_nodes = max(num_nodes, other.num_nodes);
+    else
+      connections += other.connections;
   }
 
   // Most computation that happens at the end of each iteration is parallelized
@@ -125,24 +137,22 @@ class <?=$className?> {
   bool ShouldIterate(ConstantState& state) {
     state.iteration = ++iteration;
 
-    if (iteration == 1) {
+    if (iteration == 1) {// allocate memory
       // num_nodes is incremented because IDs are 0-based.
       state.num_nodes = ++num_nodes;
-
       // Allocating space can't be parallelized.
       node_component.set_size(num_nodes);
-      node_component.fill(0);
       return true;
     } else {
-      return iteration < kIterations + 1;
+      return connections > 0 && iteration < kIterations + 1;
     }
   }
   // Finalize does nothing
   void Finalize() {}
 
   bool GetNextResult(<?=typed_ref_args($outputs_)?>) {
-
-    if (iteration < kIterations + 1)
+    // should iterate is true
+    if (connections > 0 && iteration < kIterations + 1)
       return false;
     
     if(output_iterator < num_nodes){
