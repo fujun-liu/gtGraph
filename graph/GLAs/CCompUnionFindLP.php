@@ -34,7 +34,7 @@ class <?=$className?>ConstantState {
 function CCompUnionFindLP($t_args, $inputs, $outputs)
 {
     // Class name is randomly generated.
-    $className = generate_name('CComp');
+    $className = generate_name('CCompUnionFindLP');
     // Initializiation of argument names.
     $inputs_ = array_combine(['s', 't'], $inputs);
     $vertex = $inputs_['s'];
