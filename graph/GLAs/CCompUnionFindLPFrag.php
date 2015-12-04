@@ -1,5 +1,5 @@
 <?
-function CCompUnionFindLP_Constant_State(array $t_args)
+function CCompUnionFindLPFrag_Constant_State(array $t_args)
 {
     // Grabbing variables from $t_args
     $className          = $t_args['className'];
@@ -31,10 +31,10 @@ class <?=$className?>ConstantState {
     ];
 }
 // component algorithm with label propagation
-function CCompUnionFindLP($t_args, $inputs, $outputs)
+function CCompUnionFindLPFrag($t_args, $inputs, $outputs)
 {
     // Class name is randomly generated.
-    $className = generate_name('CCompUnionFindLP');
+    $className = generate_name('CCompUnionFindLPFrag');
     // Initializiation of argument names.
     $inputs_ = array_combine(['s', 't'], $inputs);
     $vertex = $inputs_['s'];
@@ -48,7 +48,7 @@ function CCompUnionFindLP($t_args, $inputs, $outputs)
     $libraries    = ['armadillo'];
     $properties   = [];
     $extra        = [];
-    $result_type  = ['multi'];
+    $result_type  = ['fragment'];
 ?>
 
 using namespace arma;
@@ -57,7 +57,7 @@ using namespace std;
 class <?=$className?>;
 
 <?  $constantState = lookupResource(
-        'graph::CCompUnionFindLP_Constant_State',
+        'graph::CCompUnionFindLPFrag_Constant_State',
         ['className' => $className]
     ); ?>
 
@@ -175,21 +175,43 @@ class <?=$className?> {
     }
   }
 
-  // Finalize does nothing
-  void Finalize() {}
+   int GetNumFragments() {
+    long size = (num_nodes - 1) / kBlock + 1;  // num_nodes / kBlock rounded up.
+    num_fragments = (iteration == 0) ? 0 : min(size, (long) kMaxFragments);
+    return num_fragments;
+  }
 
-  bool GetNextResult(<?=typed_ref_args($outputs_)?>) {
+  // Finalize does nothing
+  Iterator* Finalize(long fragment) {
+    long count = num_nodes;
+    // The ordering of operations is important. Don't change it.
+    long first = fragment * (count / kBlock) / num_fragments * kBlock;
+    long final = (fragment == num_fragments - 1)
+              ? count - 1
+              : (fragment + 1) * (count / kBlock) / num_fragments * kBlock - 1;
+    
+    return new Iterator(first, final);
+  }
+
+  bool GetNextResult(Iterator* it, <?=typed_ref_args($outputs_)?>) {
     // should iterate is true
     if (connections > 0 && iteration < kIterations + 1)
       return false;
+    
+    if (it->first > it->second)
+      return false;
 
-    if(output_iterator < num_nodes){
+    node = it->first++;
+    component = Find(node);
+    return true;
+
+    /*if(output_iterator < num_nodes){
       node = output_iterator++;
       component = Find(node);
       return true;
     }else{
       return false;
-    }
+    }*/
   }
     
 };
@@ -197,6 +219,7 @@ class <?=$className?> {
 // Initialize the static member types.
 arma::rowvec <?=$className?>::node_component;
 arma::rowvec <?=$className?>::component_size;
+typedef <?=$className?>::Iterator <?=$className?>_Iterator;
 
 <?
     return [
@@ -209,6 +232,7 @@ arma::rowvec <?=$className?>::component_size;
         'properties'      => $properties,
         'extra'           => $extra,
         'iterable'        => true,
+        'intermediates'   => true,
         'input'           => $inputs,
         'output'          => $outputs,
         'result_type'     => $result_type,
