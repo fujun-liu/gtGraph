@@ -48,7 +48,7 @@ function CCompUnionFindLP($t_args, $inputs, $outputs)
     $libraries    = ['armadillo'];
     $properties   = [];
     $extra        = [];
-    $result_type  = ['multi'];
+    $result_type  = ['fragment'];
 ?>
 
 using namespace arma;
@@ -65,6 +65,8 @@ class <?=$className?> {
  public:
   // The constant state for this GLA.
   using ConstantState = <?=$constantState?>;
+   // The current and final indices of the result for the given fragment.
+  using Iterator = std::pair<long, long>;
 
   // The number of iterations to perform, not counting the initial set-up.
   static const constexpr int kIterations = 5;
@@ -94,6 +96,9 @@ class <?=$className?> {
   // The current iteration.
   int iteration;
   
+  // The number of fragmetns for the result.
+  int num_fragments;
+
   // check if need more iterations
   long connections;
 
@@ -169,21 +174,44 @@ class <?=$className?> {
       return connections > 0 && iteration < kIterations + 1;
     }
   }
-  // Finalize does nothing
-  void Finalize() {}
 
-  bool GetNextResult(<?=typed_ref_args($outputs_)?>) {
+   int GetNumFragments() {
+    long size = (num_nodes - 1) / kBlock + 1;  // num_nodes / kBlock rounded up.
+    num_fragments = (iteration == 0) ? 0 : min(size, (long) kMaxFragments);
+    return num_fragments;
+  }
+
+  // Finalize does nothing
+  Iterator* Finalize(long fragment) {
+    long count = num_nodes;
+    // The ordering of operations is important. Don't change it.
+    long first = fragment * (count / kBlock) / num_fragments * kBlock;
+    long final = (fragment == num_fragments - 1)
+              ? count - 1
+              : (fragment + 1) * (count / kBlock) / num_fragments * kBlock - 1;
+
+    return new Iterator(first, final);
+  }
+
+  bool GetNextResult(Iterator* it, <?=typed_ref_args($outputs_)?>) {
     // should iterate is true
     if (connections > 0 && iteration < kIterations + 1)
       return false;
     
-    if(output_iterator < num_nodes){
+    if (it->first > it->second)
+      return false;
+
+    node = it->first++;
+    component = Find(node);
+    return true;
+    
+    /*if(output_iterator < num_nodes){
       node = output_iterator++;
       component = Find(node);
       return true;
     }else{
       return false;
-    }
+    }*/
   }
     
 };
@@ -203,6 +231,7 @@ arma::rowvec <?=$className?>::component_size;
         'properties'      => $properties,
         'extra'           => $extra,
         'iterable'        => true,
+        'intermediates'   => true,
         'input'           => $inputs,
         'output'          => $outputs,
         'result_type'     => $result_type,
