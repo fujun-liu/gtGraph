@@ -204,7 +204,7 @@ class <?=$className?> {
     node = it->first++;
     component = Find(node);
     return true;
-    
+
     /*if(output_iterator < num_nodes){
       node = output_iterator++;
       component = Find(node);
@@ -219,6 +219,7 @@ class <?=$className?> {
 // Initialize the static member types.
 arma::rowvec <?=$className?>::node_component;
 arma::rowvec <?=$className?>::component_size;
+typedef <?=$className?>::Iterator <?=$className?>_Iterator;
 
 <?
     return [
