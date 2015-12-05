@@ -67,7 +67,7 @@ class <?=$className?> {
   using ConstantState = <?=$constantState?>;
 
   // The number of iterations to perform, not counting the initial set-up.
-  static const constexpr int kIterations = 10;
+  static const constexpr int kIterations = 30;
 
   // The work is split into chunks of this size before being partitioned.
   static const constexpr int kBlock = 32;
