@@ -107,12 +107,12 @@ class <?=$className?> {
     if (iteration == 0) {
       num_nodes = max((long) max(s, t), num_nodes);
       return;
-    } else if (iteration == 1){
+    } /*else if (iteration == 1){
       long max_known = (long) max(s, t);
       node_component(s) = max_known;
       node_component(t) = max_known;
       ++ connections;
-    }else{
+    }*/else{
       long s_id = node_component(s), t_id = node_component(t);
       if (s_id != t_id){
         ++ connections;
@@ -142,6 +142,9 @@ class <?=$className?> {
       state.num_nodes = ++num_nodes;
       // Allocating space can't be parallelized.
       node_component.set_size(num_nodes);
+      for (long i = 0; i < num_nodes; ++ i)
+        node_component(i) = i;
+        
       return true;
     } else {
       return connections > 0 && iteration < kIterations + 1;
