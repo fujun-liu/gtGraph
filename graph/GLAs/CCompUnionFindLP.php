@@ -180,8 +180,8 @@ class <?=$className?> {
 
   bool GetNextResult(<?=typed_ref_args($outputs_)?>) {
     // should iterate is true
-    /*if (connections > 0 && iteration < kIterations + 1)
-      return false;*/
+    if (connections > 0 && iteration < kIterations + 1)
+      return false;
 
     if(output_iterator < num_nodes){
       node = output_iterator++;
