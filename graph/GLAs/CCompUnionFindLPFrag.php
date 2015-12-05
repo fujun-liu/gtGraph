@@ -190,6 +190,9 @@ class <?=$className?> {
               ? count - 1
               : (fragment + 1) * (count / kBlock) / num_fragments * kBlock - 1;
     
+    for (long node_id = first; node_id <= final; ++ node_id){
+        node_component(node_id) = Find(node_id);
+    }
     return new Iterator(first, final);
   }
 
@@ -202,7 +205,7 @@ class <?=$className?> {
       return false;
 
     node = it->first++;
-    component = Find(node);
+    component = node_component(node);
     return true;
 
     /*if(output_iterator < num_nodes){
@@ -231,6 +234,7 @@ typedef <?=$className?>::Iterator <?=$className?>_Iterator;
         'libraries'       => $libraries,
         'properties'      => $properties,
         'extra'           => $extra,
+        'intermediates' => true,
         'iterable'        => true,
         'input'           => $inputs,
         'output'          => $outputs,
