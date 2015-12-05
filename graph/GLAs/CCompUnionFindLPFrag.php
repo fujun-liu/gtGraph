@@ -232,7 +232,6 @@ typedef <?=$className?>::Iterator <?=$className?>_Iterator;
         'properties'      => $properties,
         'extra'           => $extra,
         'iterable'        => true,
-        'intermediates'   => true,
         'input'           => $inputs,
         'output'          => $outputs,
         'result_type'     => $result_type,
