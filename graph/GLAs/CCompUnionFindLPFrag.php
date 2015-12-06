@@ -117,7 +117,15 @@ class <?=$className?> {
     }
     return node_id;
   }
-
+  
+  long FindNoCompress(long node_id){
+    // use path compression here
+    while (node_id != node_component(node_id)){
+        node_id = node_component(node_id);
+    }
+    return node_id;
+  }
+  
   void Union(long pid, long qid){
     // find their root
     pid = Find(pid);
@@ -190,9 +198,9 @@ class <?=$className?> {
               ? count - 1
               : (fragment + 1) * (count / kBlock) / num_fragments * kBlock - 1;
     
-    for (int node_id = first; node_id <= final; ++ node_id){
+    /*for (int node_id = first; node_id <= final; ++ node_id){
         node_component(node_id) = Find(node_id);
-    }
+    }*/
     printf("fragment: %d\tfirst: %d\tfinal: %d\n", fragment, first, final);
     return new Iterator(first, final);
   }
@@ -206,7 +214,7 @@ class <?=$className?> {
       return false;
 
     node = it->first++;
-    component = node_component(node);
+    component = FindNoCompress(node);
     return true;
 
     /*if(output_iterator < num_nodes){
@@ -236,7 +244,6 @@ typedef <?=$className?>::Iterator <?=$className?>_Iterator;
         'properties'      => $properties,
         'extra'           => $extra,
         'iterable'        => true,
-        'intermediates'   => true,
         'input'           => $inputs,
         'output'          => $outputs,
         'result_type'     => $result_type,
