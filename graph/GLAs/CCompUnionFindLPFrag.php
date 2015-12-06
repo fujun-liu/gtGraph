@@ -210,20 +210,20 @@ class <?=$className?> {
     if (connections > 0 && iteration < kIterations + 1)
       return false;
     
-    if (it->first > it->second)
+    /*if (it->first > it->second)
       return false;
-
+    
     node = it->first++;
-    component = FindNoCompress(node);
-    return true;
-
-    /*if(output_iterator < num_nodes){
-      node = output_iterator++;
-      component = Find(node);
-      return true;
+    component = Find(node);
+    return true;*/
+    
+    if (output_iterator++ == 0){
+        node = it->first;
+        component = it->second;
+        return true;
     }else{
-      return false;
-    }*/
+        return false;
+    }
   }
     
 };
