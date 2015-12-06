@@ -186,7 +186,7 @@ class <?=$className?> {
    int GetNumFragments() {
     long size = (num_nodes - 1) / kBlock + 1;  // num_nodes / kBlock rounded up.
     num_fragments = (iteration == 0) ? 0 : min(size, (long) kMaxFragments);
-    printf("num_fragments: %d\n", num_fragments);
+    printf("num_nodes: %ld, size: %ld, num_fragments: %d\n", num_nodes, size, num_fragments);
     return num_fragments;
   }
 
