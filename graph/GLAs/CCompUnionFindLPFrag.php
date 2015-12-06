@@ -39,7 +39,7 @@ function CCompUnionFindLPFrag($t_args, $inputs, $outputs)
     $inputs_ = array_combine(['s', 't'], $inputs);
     $vertex = $inputs_['s'];
     // Construction of outputs.
-    $outputs_ = ['node' => $vertex, 'component' => lookupType('long')];
+    $outputs_ = ['node' => $vertex, 'component' => lookupType('base::BIGINT')];
     $outputs = array_combine(array_keys($outputs), $outputs_);
     
     $sys_headers  = ['armadillo', 'algorithm'];
