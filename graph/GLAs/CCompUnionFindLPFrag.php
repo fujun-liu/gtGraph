@@ -66,7 +66,7 @@ class <?=$className?> {
   // The constant state for this GLA.
   using ConstantState = <?=$constantState?>;
    // The current and final indices of the result for the given fragment.
-  using Iterator = std::pair<long, long>;
+  using Iterator = std::pair<int, int>;
 
   // The number of iterations to perform, not counting the initial set-up.
   static const constexpr int kIterations = 10;
@@ -183,14 +183,14 @@ class <?=$className?> {
 
   // Finalize does nothing
   Iterator* Finalize(long fragment) {
-    long count = num_nodes;
+    int count = num_nodes;
     // The ordering of operations is important. Don't change it.
-    long first = fragment * (count / kBlock) / num_fragments * kBlock;
-    long final = (fragment == num_fragments - 1)
+    int first = fragment * (count / kBlock) / num_fragments * kBlock;
+    int final = (fragment == num_fragments - 1)
               ? count - 1
               : (fragment + 1) * (count / kBlock) / num_fragments * kBlock - 1;
     
-    for (long node_id = first; node_id <= final; ++ node_id){
+    for (int node_id = first; node_id <= final; ++ node_id){
         node_component(node_id) = Find(node_id);
     }
     printf("fragment: %d\tfirst: %d\tfinal: %d\n", fragment, first, final);
