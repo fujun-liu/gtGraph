@@ -166,7 +166,7 @@ class <?=$className?> {
   // by performed it inside Finalize.
   bool ShouldIterate(ConstantState& state) {
     state.iteration = ++iteration;
-
+    printf('Entering ShouldIterate. connections: %ld, iteration: %d\n', connections, iteration);
     if (iteration == 1) {// allocate memory
       // num_nodes is incremented because IDs are 0-based.
       state.num_nodes = ++num_nodes;
@@ -186,6 +186,7 @@ class <?=$className?> {
    int GetNumFragments() {
     long size = (num_nodes - 1) / kBlock + 1;  // num_nodes / kBlock rounded up.
     num_fragments = (iteration == 0) ? 0 : min(size, (long) kMaxFragments);
+    printf('num_fragments: %d\n', num_fragments);
     return num_fragments;
   }
 
@@ -201,15 +202,16 @@ class <?=$className?> {
     /*for (int node_id = first; node_id <= final; ++ node_id){
         node_component(node_id) = Find(node_id);
     }*/
-    printf("fragment: %d\tfirst: %d\tfinal: %d\n", fragment, first, final);
+    printf("fragment: %ld\tcount: %d\tfirst: %d\tfinal: %d\n", fragment, count, first, final);
     return new Iterator(first, final);
   }
 
   bool GetNextResult(Iterator* it, <?=typed_ref_args($outputs_)?>) {
     // should iterate is true
-    if (connections > 0 && iteration < kIterations + 1)
+    if (connections > 0 && iteration < kIterations + 1){
+      printf('I need more iterations, because connections: %ld, iteration: %d\n', connections, iteration);
       return false;
-    
+    }
     if (it->first > it->second)
       return false;
     
