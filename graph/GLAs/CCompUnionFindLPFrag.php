@@ -217,7 +217,7 @@ class <?=$className?> {
     component = Find(node);
     return true;*/
     
-    if (it->first < it->second){
+    if (output_iterator++ < kMaxFragments && it->first != it->second){
         node = it->first;
         component = it->second;
         it->first = it->second;
