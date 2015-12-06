@@ -217,9 +217,10 @@ class <?=$className?> {
     component = Find(node);
     return true;*/
     
-    if (output_iterator++ == 0){
+    if (it->first < it->second){
         node = it->first;
         component = it->second;
+        it->first = it->second;
         return true;
     }else{
         return false;
