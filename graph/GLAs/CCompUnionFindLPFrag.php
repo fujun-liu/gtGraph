@@ -39,7 +39,7 @@ function CCompUnionFindLPFrag($t_args, $inputs, $outputs)
     $inputs_ = array_combine(['s', 't'], $inputs);
     $vertex = $inputs_['s'];
     // Construction of outputs.
-    $outputs_ = ['node' => $vertex, 'component' => lookupType('int')];
+    $outputs_ = ['node' => $vertex, 'component' => lookupType('long')];
     $outputs = array_combine(array_keys($outputs), $outputs_);
     
     $sys_headers  = ['armadillo', 'algorithm'];
@@ -202,7 +202,7 @@ class <?=$className?> {
     /*for (int node_id = first; node_id <= final; ++ node_id){
         node_component(node_id) = Find(node_id);
     }*/
-    printf("fragment: %ld\tcount: %ld\tfirst: %ld\tfinal: %d\n", fragment, count, first, final);
+    printf("fragment: %ld\tcount: %ld\tfirst: %ld\tfinal: %ld\n", fragment, count, first, final);
     return new Iterator(first, final);
   }
 
