@@ -193,6 +193,7 @@ class <?=$className?> {
     for (long node_id = first; node_id <= final; ++ node_id){
         node_component(node_id) = Find(node_id);
     }
+    printf("fragment: %d\tfirst: %d\tfinal: %d\n", fragment, first, final);
     return new Iterator(first, final);
   }
 
