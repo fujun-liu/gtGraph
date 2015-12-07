@@ -118,14 +118,6 @@ class <?=$className?> {
     return node_id;
   }
   
-  uint64_t FindNoCompress(uint64_t node_id){
-    // use path compression here
-    while (node_id != node_component(node_id)){
-        node_id = node_component(node_id);
-    }
-    return node_id;
-  }
-  
   void Union(uint64_t pid, uint64_t qid){
     // find their root
     pid = Find(pid);
@@ -146,9 +138,6 @@ class <?=$className?> {
 
   // Basic dynamic array allocation.
   void AddItem(<?=const_typed_ref_args($inputs_)?>) {
-    // ignore self loops
-    if (s == t)
-        return;
     if (iteration == 0) {
       num_nodes = max((uint64_t) max(s, t), num_nodes);
       return;
