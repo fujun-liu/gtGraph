@@ -90,9 +90,6 @@ class <?=$className?> {
   // The number of unique nodes seen.
   uint64_t num_nodes;
 
-  // 
-  uint64_t output_iterator;
-
   // The current iteration.
   int iteration;
   
@@ -106,7 +103,7 @@ class <?=$className?> {
   <?=$className?>(const <?=$constantState?>& state)
       : constant_state(state),
         num_nodes(state.num_nodes),
-        iteration(state.iteration),output_iterator(0),connections(0) {
+        iteration(state.iteration),connections(0) {
   }
 
   uint64_t Find(uint64_t node_id){
