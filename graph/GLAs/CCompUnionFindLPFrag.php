@@ -13,7 +13,7 @@ class <?=$className?>ConstantState {
   int iteration;
 
   // The number of distinct nodes in the graph.
-  long num_nodes;
+  uint64_t num_nodes;
 
  public:
   friend class <?=$className?>;
@@ -66,7 +66,7 @@ class <?=$className?> {
   // The constant state for this GLA.
   using ConstantState = <?=$constantState?>;
    // The current and final indices of the result for the given fragment.
-  using Iterator = std::pair<long, long>;
+  using Iterator = std::pair<uint64_t, uint64_t>;
 
   // The number of iterations to perform, not counting the initial set-up.
   static const constexpr int kIterations = 10;
@@ -88,10 +88,10 @@ class <?=$className?> {
   const ConstantState& constant_state;
 
   // The number of unique nodes seen.
-  long num_nodes;
+  uint64_t num_nodes;
 
   // 
-  long output_iterator;
+  uint64_t output_iterator;
 
   // The current iteration.
   int iteration;
@@ -100,7 +100,7 @@ class <?=$className?> {
   int num_fragments;
 
   // check if need more iterations
-  long connections;
+  uint64_t connections;
 
  public:
   <?=$className?>(const <?=$constantState?>& state)
@@ -109,7 +109,7 @@ class <?=$className?> {
         iteration(state.iteration),output_iterator(0),connections(0) {
   }
 
-  long Find(long node_id){
+  uint64_t Find(uint64_t node_id){
     // use path compression here
     while (node_id != node_component(node_id)){
         node_component(node_id) = node_component(node_component(node_id));
@@ -118,7 +118,7 @@ class <?=$className?> {
     return node_id;
   }
   
-  long FindNoCompress(long node_id){
+  uint64_t FindNoCompress(uint64_t node_id){
     // use path compression here
     while (node_id != node_component(node_id)){
         node_id = node_component(node_id);
@@ -126,7 +126,7 @@ class <?=$className?> {
     return node_id;
   }
   
-  void Union(long pid, long qid){
+  void Union(uint64_t pid, uint64_t qid){
     // find their root
     pid = Find(pid);
     qid = Find(qid);
@@ -134,7 +134,7 @@ class <?=$className?> {
       return;
 
     ++ connections;
-    long psz = component_size(pid), qsz = component_size(qid);
+    uint64_t psz = component_size(pid), qsz = component_size(qid);
     if (psz > qsz){
       node_component(qid) = pid;
       component_size(pid) += qsz; 
@@ -150,10 +150,10 @@ class <?=$className?> {
     if (s == t)
         return;
     if (iteration == 0) {
-      num_nodes = max((long) max(s, t), num_nodes);
+      num_nodes = max((uint64_t) max(s, t), num_nodes);
       return;
     } else{
-      Union((long) s, (long) t);
+      Union((uint64_t) s, (uint64_t) t);
     }
   }
 
@@ -169,13 +169,13 @@ class <?=$className?> {
   // by performed it inside Finalize.
   bool ShouldIterate(ConstantState& state) {
     state.iteration = ++iteration;
-    printf("Entering ShouldIterate. connections: %ld, iteration: %d\n", connections, iteration);
+    printf("Entering ShouldIterate. connections: %lu, iteration: %d\n", connections, iteration);
     if (iteration == 1) {// allocate memory
       // num_nodes is incremented because IDs are 0-based.
       state.num_nodes = ++num_nodes;
       // Allocating space can't be parallelized.
       node_component.set_size(num_nodes);
-      for (long i = 0; i < num_nodes; ++ i){
+      for (uint64_t i = 0; i < num_nodes; ++ i){
         node_component(i) = i;
       }
       component_size.set_size(num_nodes);
@@ -187,29 +187,29 @@ class <?=$className?> {
   }
 
    int GetNumFragments() {
-    long size = (num_nodes - 1) / kBlock + 1;  // num_nodes / kBlock rounded up.
-    num_fragments = (iteration == 0) ? 0 : min(size, (long) kMaxFragments);
-    printf("num_nodes: %ld, size: %ld, num_fragments: %d\n", num_nodes, size, num_fragments);
+    uint64_t size = (num_nodes - 1) / kBlock + 1;  // num_nodes / kBlock rounded up.
+    num_fragments = (iteration == 0) ? 0 : min(size, (uint64_t) kMaxFragments);
+    printf("num_nodes: %lu, size: %lu, num_fragments: %d\n", num_nodes, size, num_fragments);
     return num_fragments;
   }
 
   // Finalize does nothing
-  Iterator* Finalize(long fragment) {
-    long count = num_nodes;
+  Iterator* Finalize(int fragment) {
+    uint64_t count = num_nodes;
     // The ordering of operations is important. Don't change it.
-    long first = fragment * (count / kBlock) / num_fragments * kBlock;
-    long final = (fragment == num_fragments - 1)
+    uint64_t first = fragment * (count / kBlock) / num_fragments * kBlock;
+    uint64_t final = (fragment == num_fragments - 1)
               ? count - 1
               : (fragment + 1) * (count / kBlock) / num_fragments * kBlock - 1;
     
-    printf("fragment: %ld\tcount: %ld\tfirst: %ld\tfinal: %ld\n", fragment, count, first, final);
+    printf("fragment: %lu\tcount: %lu\tfirst: %lu\tfinal: %lu\n", fragment, count, first, final);
     return new Iterator(first, final);
   }
 
   bool GetNextResult(Iterator* it, <?=typed_ref_args($outputs_)?>) {
     // should iterate is true
     if (connections > 0 && iteration < kIterations + 1){
-      printf("I need more iterations, because connections: %ld, iteration: %d\n", connections, iteration);
+      printf("I need more iterations, because connections: %lu, iteration: %d\n", connections, iteration);
       return false;
     }
     if (it->first > it->second)
