@@ -146,6 +146,9 @@ class <?=$className?> {
 
   // Basic dynamic array allocation.
   void AddItem(<?=const_typed_ref_args($inputs_)?>) {
+    // ignore self loops
+    if (s == t)
+        return;
     if (iteration == 0) {
       num_nodes = max((long) max(s, t), num_nodes);
       return;
@@ -199,9 +202,6 @@ class <?=$className?> {
               ? count - 1
               : (fragment + 1) * (count / kBlock) / num_fragments * kBlock - 1;
     
-    /*for (int node_id = first; node_id <= final; ++ node_id){
-        node_component(node_id) = Find(node_id);
-    }*/
     printf("fragment: %ld\tcount: %ld\tfirst: %ld\tfinal: %ld\n", fragment, count, first, final);
     return new Iterator(first, final);
   }
@@ -218,15 +218,6 @@ class <?=$className?> {
     node = it->first++;
     component = Find(node);
     return true;
-    
-    /*if (output_iterator++ < kMaxFragments && it->first != it->second){
-        node = it->first;
-        component = it->second;
-        it->first = it->second;
-        return true;
-    }else{
-        return false;
-    }*/
   }
     
 };
