@@ -27,8 +27,10 @@ III Results
    Two dataset are tested, Graph, which contains 1,724,573,717 nodes and 64,422,807,961 edges, and Graph2012, which contains 3,563,602,788 nodes and 128,736,914,167 edges. For Graph, the algorithm takes 10 minutes; For Graph2012, it takes 12 minutes.
    
    The system cpu utilization plot for Graph dataset is shown as below
+   
    ![alt tag](https://github.com/fujun-liu/gtGraph/blob/master/graph_cpu.jpg)
    And the plot for Graph2012 is this:
+   
    ![alt tag](https://github.com/fujun-liu/gtGraph/blob/master/graph2012_cpu.jpg)
 
 We can find that the three phases are very clear in both plots. In phase 1, the task is to figure out graph size which is faster than disk speed; in Phase 2, the auctual union-find work is done. In this phase, the cpu can not keep up with disk speed. In phase 3, since all work is done in phase 2, this phase is realy fast.
@@ -41,5 +43,6 @@ Some interesting findings:
 
 2). The number of connected components dcrease in log10 scale.
    In the figure below, we count the number of connected components whose sizes are above a certain threshold. Note that, the y-axis is log10 based.
+   
     ![alt tag](https://github.com/fujun-liu/gtGraph/blob/master/change.png)
 
