@@ -1,4 +1,6 @@
 # gtGraph
+A few slides:  https://docs.google.com/presentation/d/1-1H5j_0brMypXs2wgStuecBCMgRh0FemuW1U7ikUuHw/edit?ts=5665f577#slide=id.gec4a0dd8f_1_15
+
 We are developing a graph library as part of Grokit system https://github.com/tera-insights. 
 
 Currently implemented graph algorithms is finding connected components in large graph.
