@@ -2,7 +2,8 @@
 We are developing a graph library as part of Grokit system https://github.com/tera-insights. 
 
 Currently implemented graph algorithms is finding connected components in large graph.
-1. Grokit
+
+1. About Grokit
 Grokit (http://www.terainsights.com/) is data engine for large scale data processing. It provides several computational models for large scale data analysis, and one of them is Generalized Linear Aggregate (GLA). GLA provides four APIs to users,       AddItem, AddState, Finalize, GetNextResult. And AddItem and AddState works in spirit similar with Map/Reduce. 
 
 2. Connected Component Algorithm
