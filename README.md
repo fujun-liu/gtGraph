@@ -23,7 +23,11 @@ Arumugam, Subi, et al. "The DataPath system: a data-centric analytic processing 
 
 III Results
 
-   Two dataset are tested, Graph2014, which contains 1,724,573,717 nodes and 64,422,807,961 edges, and Graph2012, which contains 3,563,602,788 nodes and 128,736,914,167 edges. For more infomation, plesase go to http://webdatacommons.org/hyperlinkgraph/. For Graph2014, the algorithm takes 10 minutes; For Graph2012, it takes 12 minutes.
+   Two dataset are tested, Graph2014, which contains 1,724,573,717 nodes and 64,422,807,961 edges, and Graph2012, which contains 3,563,602,788 nodes and 128,736,914,167 edges. For more infomation, plesase go to
+   
+   http://webdatacommons.org/hyperlinkgraph/. 
+   
+   For Graph2014, the algorithm takes 10 minutes; For Graph2012, it takes 12 minutes.
    
    The system cpu utilization plot for Graph2014 dataset is shown as below
    
@@ -38,9 +42,12 @@ We can find that the three phases are very clear in both plots. In phase 1, the 
 Some interesting findings:
 
 1). Super large component.
-   In both graphs, we find that there exists a super large connected component.
+   In both graphs, we find that there exists a super large connected component. Here "Graph" represents "Graph2014"
+   
    ![alt tag](https://github.com/fujun-liu/gtGraph/blob/master/largeComponent.png)
+   
    In fact, our finding is the same as reported in http://webdatacommons.org/hyperlinkgraph/
+   
 2). The number of connected components dcrease in log10 scale.
    In the figure below, we count the number of connected components whose sizes are above a certain threshold. Note that, the y-axis is log10 based.
    
