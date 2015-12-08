@@ -3,11 +3,11 @@ We are developing a graph library as part of Grokit system https://github.com/te
 
 Currently implemented graph algorithms is finding connected components in large graph.
 
-1. About Grokit
+I About Grokit
 
 Grokit (http://www.terainsights.com/) is data engine for large scale data processing. It provides several computational models for large scale data analysis, and one of them is Generalized Linear Aggregate (GLA). GLA provides four APIs to users,       AddItem, AddState, Finalize, GetNextResult. And AddItem and AddState works in spirit similar with Map/Reduce. 
 
-2. Connected Component Algorithm
+II Connected Component Algorithm
 
 Since the Grokit system is deployed on a machine with 512G memory, we used union-find data structure to find connected components. The algorithm contains three phases:
 
@@ -21,7 +21,7 @@ Note that we scan the dataset which lives on disk sevral times which is usually 
 
 Arumugam, Subi, et al. "The DataPath system: a data-centric analytic processing engine for large data warehouses." Proceedings of the 2010 ACM SIGMOD International Conference on Management of data. ACM, 2010.
 
-3. Results
+III Results
 
    (some details about background introduction of dataset)
    Two dataset are tested, Graph, which contains 1,724,573,717 nodes and 64,422,807,961 edges, and Graph2012, which contains 3,563,602,788 nodes and 128,736,914,167 edges. For Graph, the algorithm takes 10 minutes; For Graph2012, it takes 12 minutes.
