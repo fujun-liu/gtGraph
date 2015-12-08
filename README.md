@@ -17,7 +17,7 @@ Phase 2: scan the graph in parallel and run union-find GLA in parallel to find c
 
 Phase 3: Repeat Phase 2 until convergence. The reason is that no lock is used in Phase 2 which use 64 threads to uodate a shared data structure, data race might happen. However, in our current experiments, it never happened. As a result, Phase 3 acts like a safe check.
 
-Note that we scan the dataset which lives on disk sevral times which is usually a bad idea. The reason is that Grokit a data centric processing engine, which load data in extreamly high speed, 4GB/seconds. In fact, when we design algorithm, the goal is to keep up with disk speed. For details, please refer to Datapath.
+Note that we choose to scan the dataset multiple times which lives on disk sevral times which is usually a bad idea. We have two reasons for this. First, we assume the graph nodes can fit in memory, the edges can not; Second, Grokit a data centric processing engine, which load data in extreamly high speed, 4GB/seconds. In fact, when we design algorithm in Grokit, the goal is to purely keep up with disk speed. For details, please refer to Datapath.
 
 Arumugam, Subi, et al. "The DataPath system: a data-centric analytic processing engine for large data warehouses." Proceedings of the 2010 ACM SIGMOD International Conference on Management of data. ACM, 2010.
 
