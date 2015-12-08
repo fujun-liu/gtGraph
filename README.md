@@ -44,5 +44,5 @@ Some interesting findings:
 2). The number of connected components dcrease in log10 scale.
    In the figure below, we count the number of connected components whose sizes are above a certain threshold. Note that, the y-axis is log10 based.
    
-    ![alt tag](https://github.com/fujun-liu/gtGraph/blob/master/change.png)
+   ![alt tag](https://github.com/fujun-liu/gtGraph/blob/master/change.png)
 
